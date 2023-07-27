@@ -21,4 +21,14 @@ public class SolutionTest {
 
         Assert.assertEquals(expected, actual);
     }
+
+    @Test
+    public void maxRunTimeTest3() {
+        int n = 3;
+        int[] batteries = {10,10,3,5};
+        long expected = 8L;
+        long actual = new Solution().maxRunTime(n, batteries);
+
+        Assert.assertEquals(expected, actual);
+    }
 }
