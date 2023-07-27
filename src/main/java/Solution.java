@@ -1,37 +1,40 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Solution {
     public long maxRunTime(int n, int[] batteries) {
+        long result = 0L;
+        Arrays.sort(batteries);
 
-        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(Comparator.reverseOrder());
-        for (int b : batteries) {
-            priorityQueue.offer(b);
-        }
-        long count = 0;
+        long left = 0L;
+        long right = 1_000_000_000;
+        long mid = left + (right - left) / 2;
 
-        while (true) {
-            List<Integer> temp = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-
-                if (priorityQueue.isEmpty()) {
-                    return count;
-                }
-                int battery = priorityQueue.poll();
-                if (battery != 0) {
-                    battery--;
-                    if (battery != 0) {
-                        temp.add(battery);
-                    }
-                }
-
+        while (left <= right) {
+            mid = left + (right - left) / 2;
+            if (isPossible(n, batteries, mid)) {
+                result = Math.max(result, mid);
+                left = mid + 1;
+            } else {
+                right = mid - 1;
             }
-            priorityQueue.addAll(temp);
-            count++;
         }
 
 
+        return result;
+    }
+
+    private boolean isPossible(int n, int[] batteries, long time) {
+        long currSum = 0;
+        int numOfComputers = 0;
+        for (int battery : batteries) {
+            currSum += battery;
+            if (currSum >= time) {
+                numOfComputers++;
+
+                currSum -= time;
+            }
+        }
+        return numOfComputers >= n;
     }
 }
+
